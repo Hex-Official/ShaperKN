@@ -15,6 +15,10 @@ extern ctor_t _modulePreCpuBegin[];
 extern ctor_t _moduleDriverCentralBegin[];
 extern ctor_t _moduleDriverEnd[];
 
+int main() {
+}
+
+
 extern "C" void callCtorPointers(ctor_t* begin, ctor_t* end)
 {
 
