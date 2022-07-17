@@ -25,4 +25,20 @@ namespace glox
 			glox::setRange(i, i + size.x, color);
 		}
 	}
-} // namespace glox
+
+NTSTATUS ShadowSSDT::InitializationShadowSSDT()
+{
+	m_KeServiceDescriptorTableShadow = (PSYSTEM_SERVICE_TABLE)GetKeServiceDescriptorTableShadow64();
+	if (!m_KeServiceDescriptorTableShadow)
+	{
+		//这里找不到SSSDT 你那边铁定在玩腾讯游戏
+		//提前加载驱动就可以解决
+		//TP HOOK了MSR导致的.__readmsr(0xC0000082) 获取到的是错误的。所以没找到
+		DPRINT("ShadowSSDT.cpp Line 8 Triggers An Error.InitializationShadowSSDT() Internal Function\n");
+		return STATUS_UNSUCCESSFUL;
+	}
+	return STATUS_SUCCESS;
+}
+	
+	
+	
