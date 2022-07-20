@@ -83,3 +83,41 @@ static void gogole_test()
 }
 
 registerTest(gogole_test);
+
+int_32 lol = 0;
+int iter = 0;
+uint_16 CursorPos;
+
+void IOWait(){
+    asm volatile ("outb %%al, $0x80" : : "a"(0));
+}
+
+void outb8(uint_16 port,uint_8 value){
+    asm volatile ("outb %0, %1" : :"a"(value) ,"Nd"(port));
+}
+void outb16(uint_16 port,uint_16 value){
+    asm volatile ("outw %0, %1" : :"a"(value) ,"Nd"(port));
+}
+void outb32(uint_16 port,uint_32 value){
+    asm volatile ("outl %0, %1" : :"a"(value) ,"Nd"(port));
+}
+void outbslow8(uint_16 port,uint_8 value){
+     __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (value), "Nd" (port));
+}
+
+uint_8 inb8(uint_16 port){
+    uint_8 ret;
+    asm volatile ("inb %1, %0" : :"a"(ret) ,"Nd"(port));
+    return ret;
+}
+uint_16 inb16(uint_16 port){
+    uint_16 ret;
+    asm volatile ("inw %1, %0" : :"a"(ret) ,"Nd"(port));
+    return ret;
+}
+uint_32 inb32(uint_16 port){
+    uint_32 ret;
+    asm volatile ("inl %1, %0" : :"a"(ret) ,"Nd"(port));
+    return ret;
+}
+
