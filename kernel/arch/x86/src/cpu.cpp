@@ -203,3 +203,39 @@ static void testing()
 }
 
 registerTest(testing);
+
+
+void setCursorpos(uint_16 pos){
+outb8(0x3d4,0x0f);
+outb8(0x3d5,(uint_8)(pos & 0xff));
+outb8(0x3d4,0x0e);
+outb8(0x3d5,(uint_8)((pos >> 8) & 0xff));
+CursorPos = pos;
+}
+void print(const int_8* str,uint_8 color)
+{
+    static uint_16* VideoMemory = (uint_16*)0xb8000;
+    int i = 0;
+    int iter = CursorPos;
+    while(str[i] != '\0'){
+        switch (str[i])
+        {
+        case 10://newline
+            iter += 80;
+            iter -= iter % 80;//automaticly returns on newlines like unix
+            break;
+        case 13://return
+            iter -= iter % 80;
+            break;
+        
+        default:
+            VideoMemory[iter] = (VideoMemory[iter] & (color << 8)) | str[i];
+            iter++;
+        }
+        
+        i++;
+    }
+    setCursorpos(iter);   
+
+	endl;
+	
